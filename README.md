@@ -394,3 +394,12 @@ fn roll(seed: u64) -> u64 {
     ret pair.1 + 1_u64
 }
 ```
+
+## SDK development
+
+Encore pins this package as a Git submodule. Clone the complete SDK with
+`git clone --recurse-submodules --branch trunk https://github.com/encore-ecosystem/encore.git`
+and edit this package under `packages/std/`. Sibling `path@` dependencies
+are resolved from that checkout. Encore CI tests the exact package commits
+with the compiler on all supported native targets. Published package archives
+rewrite path dependencies to exact index versions.

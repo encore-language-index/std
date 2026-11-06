@@ -1,12 +1,12 @@
 [project]
 name = "std"
 version = "0.0.8"
-repository = "https://github.com/encore-ecosystem/encore-index"
-encore = ">=0.1.6"
+repository = "https://github.com/encore-language-index/std"
+encore = ">=0.1.14"
 description = "stdlib for Encore language"
 readme = "README.md"
 licence = "MIT"
-dependencies = ["sys@platform", "sys@core"]
+dependencies = ["sys@platform"]
 
 [target.x86_64-unknown-linux-gnu]
 link-args = ["-lcares"]
