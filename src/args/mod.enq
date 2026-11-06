@@ -1,0 +1,31 @@
+//! Process argument adapter for pure command-line parsers.
+import core::option::Option
+import core::vec::Vec
+import std::os
+
+/// Returns the process argument count.
+pub fn process_arg_count() -> usize {
+    ret os::argc()
+}
+
+/// Returns one raw process argument through the parser boundary.
+pub fn process_arg(index: usize) -> Option[str] {
+    ret os::argv(index)
+}
+
+/// Copies process arguments beginning at `start` for a command parser.
+pub fn process_args(start: usize) -> Vec[str] {
+    let mut out = Vec[str]::new()
+    let mut index = start
+    while index < process_arg_count() {
+        match process_arg(index) {
+            Some(value) => {
+                out.push(value)
+            }
+            None => {
+            }
+        }
+        index += 1_usize
+    }
+    ret out
+}

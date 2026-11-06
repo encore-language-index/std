@@ -1,0 +1,5 @@
+//! Shared terminal capability policy; ANSI rendering belongs to rich.
+extern fn encore_terminal_is_tty(fd: i32) -> bool
+extern fn encore_terminal_color_enabled(fd: i32) -> bool
+pub fn is_terminal(fd: i32) -> bool { unsafe { ret encore_terminal_is_tty(fd) } }
+pub fn color_enabled(fd: i32) -> bool { unsafe { ret encore_terminal_color_enabled(fd) } }
