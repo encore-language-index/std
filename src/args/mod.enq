@@ -1,6 +1,7 @@
 //! Process argument adapter for pure command-line parsers.
 import core::option::Option
 import core::vec::Vec
+
 import std::os
 
 /// Returns the process argument count.
