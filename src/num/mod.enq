@@ -1,2 +1,14 @@
-//! Compatibility export; pure collections and parsing live in core.
-pub import core::num::*
+//! Compatibility entry points; checked integer parsing lives in core.
+import core::cast::Numeric
+import core::result::Result
+pub import core::num::{Integer, ParseIntError}
+
+// Keep concrete declarations at the legacy path so retained generic templates
+// bind these calls consistently with the published bootstrap compiler.
+pub fn parse[T: Integer + Numeric](text: str) -> Result[T, ParseIntError] {
+    ret core::num::parse[T](text)
+}
+
+pub fn parse_radix[T: Integer + Numeric](text: str, radix: u32) -> Result[T, ParseIntError] {
+    ret core::num::parse_radix[T](text, radix)
+}
