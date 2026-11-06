@@ -1,7 +1,7 @@
 //! Compatibility entry points; checked integer parsing lives in core.
 import core::cast::Numeric
-import core::result::Result
 pub import core::num::{Integer, ParseIntError}
+import core::result::Result
 
 // Keep concrete declarations at the legacy path so retained generic templates
 // bind these calls consistently with the published bootstrap compiler.
