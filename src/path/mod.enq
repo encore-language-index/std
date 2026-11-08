@@ -357,7 +357,7 @@ impl for Path {
     }
 }
 
-impl Div[str] for Path {
+impl Div[str, Path] for Path {
     /// Joins a path component using the `/` operator.
     pub fn op(self: Path, other: str) -> Path {
         ret self.join(other)
