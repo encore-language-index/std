@@ -207,7 +207,7 @@ Main API:
 - `Path::new(raw)`, `Path::cwd()`, `Path::home()`
 - `as_str()`
 - `is_absolute()`, `is_relative()`
-- `join(part)`, `join_path(path)`, `left / "child"` via `Div[str]`
+- `join(part)`, `join_path(path)`, `left / "child"` via `Div[str, Path]`
 - `expanduser()`, `normalize()`, `absolute()`, `resolve()`
 - `name()`, `file_name()`, `stem()`, `suffix()`, `extension()`
 - `parent()`
