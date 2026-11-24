@@ -15,16 +15,16 @@ pub fn block_on[T, F: Future[T]](future: F) -> T {
     if token == 0_usize {
         panic("cannot allocate executor waker")
     }
-    let mut current = future
+    let mut current = future.poll(context(token))
     loop {
-        match current.poll(context(token)) {
+        match current {
             Poll[F, T]::Ready(value) => {
                 encore_async_waker_drop(token)
                 ret value
             }
             Poll[F, T]::Pending(next) => {
-                current = next
                 encore_async_waker_wait(token)
+                current = next.poll(context(token))
             }
         }
     }

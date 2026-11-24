@@ -1,4 +1,6 @@
 import core::future::{Context, Future, Poll}
+import core::vec::Vec
+
 import std::future::block_on
 
 struct Once {
@@ -10,14 +12,32 @@ impl Future[u32] for Once {
     fn poll(self: Once, context: Context) -> Poll[Once, u32] {
         if self.pending {
             context.waker.wake()
-            ret Poll[Once, u32]::Pending(Once{false, self.value})
+            ret Poll[Once, u32]::Pending(Once { false, self.value })
         }
         ret Poll[Once, u32]::Ready(self.value)
     }
 }
 
+struct Buffered {
+    pending: bool
+    values: Vec[u32]
+}
+
+impl Future[u32] for Buffered {
+    fn poll(self: Self, context: Context) -> Poll[Self, u32] {
+        if self.pending {
+            context.waker.wake()
+            ret Poll::Pending(Self { false, self.values })
+        }
+        ret Poll::Ready(self.values.get(0_usize).unwrap_or(0_u32))
+    }
+}
+
 fn main() -> u32 {
-    let value = block_on[u32, Once](Once{true, 42_u32})
-    if value == 42_u32 { ret 0_u32 }
+    let value = block_on[u32, Once](Once { true, 42_u32 })
+    let buffered = block_on[u32, Buffered](Buffered { true, vec![42_u32] })
+    if value == 42_u32 && buffered == 42_u32 {
+        ret 0_u32
+    }
     ret 1_u32
 }
