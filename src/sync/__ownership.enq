@@ -1,0 +1,7 @@
+//! Internal ownership helpers shared by SDK protocol packages.
+pub import platform::sync::{__Lease, __adopt}
+pub fn __empty() -> __Lease {
+    unsafe {
+        ret __adopt(0_usize)
+    }
+}

@@ -19,7 +19,7 @@ Applications resolve this package through the configured Encore registry.
 
 ## HTTP
 
-The patched local Encore 0.1.6 build provides `std::http::HTTPSyncClient` and `HTTPAsyncClient`.
+The patched local Encore 0.1.6 build provides `http::HTTPSyncClient` and `HTTPAsyncClient`.
 Both use `HttpRequest`, `HttpResponse`, `HttpClientConfig`, `HTTPError` and
 `HTTPErrorKind`. `send` performs one request without redirects or retries.
 The compatibility `HttpClient` API, including its redirecting `get`, remains.
@@ -321,49 +321,13 @@ fn show(count: usize) {
 
 ## Networking
 
-`std::net` exposes the beta TCP API implemented by the target-selected
-`platform` refrain:
+Networking is provided by separate SDK packages. Add `sys@network` for TCP/TLS
+and `sys@http` for HTTP clients. `std` has no networking dependency.
 
-- `socket_addr(host, port) -> str`
-- `TcpStream::connect(addr) -> Result[TcpStream, str]`
-- `TcpStream::read(max) -> Result[str, str]`
-- `TcpStream::write(data) -> Result[i32, str]`
-- `TcpStream::close() -> Result[bool, str]`
-- `TcpListener::bind(addr) -> Result[TcpListener, str]`
-- `TcpListener::accept() -> Result[TcpStream, str]`
-- `TcpListener::close() -> Result[bool, str]`
-
-`TcpStream` and `TcpListener` implement `ContextManager`, so they can be used
-with `with` when the program should close them at block exit.
-
-`std::tls` exposes the verified blocking TLS client implemented by the
-target-selected `platform` refrain.
-`std::http` provides the synchronous and asynchronous clients described above,
-as well as the compatibility client on that stream:
-
-- `Url::parse(value)` parses absolute HTTPS URLs and loopback HTTP URLs;
-- `HttpRequest::get(url)` and `encode()` create HTTP/1.1 requests;
-- `HttpClient::new().get(url)` follows HTTPS redirects and returns `HttpResponse`;
-- `HttpClientConfig` configures a private CA file, redirect limit, response-body
-  limit and per-operation timeout.
-
-```enq
-import core::result::Result
-import std::http::HttpClient
-
-fn fetch() -> str {
-    match HttpClient::new().get("https://example.com/") {
-        Result::Ok(response) => { ret response.body() }
-        Result::Err(error) => { ret "request failed: " + error }
-    }
-    ret ""
-}
-```
-
-The compatibility client is blocking and supports HTTP/1.0 and HTTP/1.1 responses,
-`Content-Length`, connection-close framing, chunked transfer encoding and
-absolute or root-relative HTTPS redirects. HTTP/2, connection pooling and
-server-side TLS remain follow-up work.
+- Replace `std::net` and `std::tls` with `network::{Stream, Listener, ConnectOptions, ListenOptions}`.
+- Replace HTTP imports with `http::{HttpClient, HTTPSyncClient, HTTPAsyncClient, ...}`.
+- Sync and async HTTP clients share `network`'s transport on Linux, macOS and Windows.
+- TLS uses OpenSSL's trust store; `HttpClientConfig::with_ca_file` sets a custom CA.
 
 ## Math And Random
 
